@@ -1,0 +1,16 @@
+{
+  "name": "Smart Currency Converter",
+  "short_name": "Converter",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#1e3c72",
+  "theme_color": "#0072ff",
+  "description": "A smart currency converter that works online and offline!",
+  "icons": [
+    {
+      "src": "https://i.imgur.com/yZgrO6m.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

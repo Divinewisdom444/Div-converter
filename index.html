@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Smart Currency Converter — Divine ✨</title>
+
+<!-- ✅ PWA + APP SETTINGS -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Divine Converter">
+<link rel="apple-touch-icon" href="https://i.imgur.com/yZgrO6m.png">
+<link rel="icon" type="image/png" href="https://i.imgur.com/yZgrO6m.png">
+<meta name="theme-color" content="#0072ff">
+<link rel="manifest" href="manifest.json">
+
+<style>
+:root {
+  --glass: rgba(255, 255, 255, 0.12);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Poppins", system-ui, sans-serif;
+  background: linear-gradient(-45deg, #0f2027, #203a43, #2c5364, #1e3c72);
+  background-size: 400% 400%;
+  animation: gradientMove 15s ease infinite;
+  color: #fff;
+}
+
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.card {
+  width: 340px;
+  padding: 28px;
+  border-radius: 14px;
+  background: var(--glass);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.35);
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+h1 {
+  margin: 0 0 12px;
+  font-size: 22px;
+}
+
+input, select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  margin: 8px 0;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font-size: 15px;
+  text-align: center;
+  outline: none;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(135deg, #0072ff, #00c6ff);
+  color: #fff;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: transform 0.2s, box-shadow 0.3s;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 198, 255, 0.4);
+}
+
+#result {
+  margin-top: 14px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.status {
+  font-size: 13px;
+  color: #ffd;
+  margin-top: 8px;
+}
+
+/* 🔴 LIVE Indicator + Refresh button */
+.live {
+  margin-top: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #00ffb3;
+  text-shadow: 0 0 8px #00ffb3;
+  display: inline-block;
+  animation: pulse 2s infinite;
+  visibility: hidden;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; text-shadow: 0 0 8px #00ffb3; }
+  50% { opacity: 0.3; text-shadow: 0 0 2px #00ffb3; }
+  100% { opacity: 1; text-shadow: 0 0 8px #00ffb3; }
+}
+
+#refreshBtn {
+  background: linear-gradient(135deg, #ff512f, #dd2476);
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 8px;
+  border: none;
+  color: #fff;
+  margin-left: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+#refreshBtn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px rgba(255, 80, 130, 0.5);
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+footer {
+  margin-top: 15px;
+  font-size: 13px;
+  opacity: 0.8;
+  text-align: center;
+  color: #fff;
+  text-shadow: 0 0 6px rgba(255, 255, 255, 0.4);
+}
+</style>
+</head>
+
+<body>
+  <div class="card">
+    <h1>💱 Smart Converter</h1>
+
+    <input id="amount" type="number" placeholder="Enter amount" step="any" />
+    <select id="from">
+      <option value="USD">USD 🇺🇸</option>
+      <option value="NGN">NGN 🇳🇬</option>
+      <option value="EUR">EUR 🇪🇺</option>
+      <option value="GBP">GBP 🇬🇧</option>
+      <option value="JPY">JPY 🇯🇵</option>
+    </select>
+
+    <select id="to">
+      <option value="NGN">NGN 🇳🇬</option>
+      <option value="USD">USD 🇺🇸</option>
+      <option value="EUR">EUR 🇪🇺</option>
+      <option value="GBP">GBP 🇬🇧</option>
+      <option value="JPY">JPY 🇯🇵</option>
+    </select>
+
+    <button id="convertBtn">Convert</button>
+
+    <div class="toggle">
+      <input id="voiceToggle" type="checkbox" />
+      <label for="voiceToggle">🔊 Voice ON</label>
+    </div>
+
+    <div class="toggle">
+      <div id="live" class="live">🟢 LIVE Updating...</div>
+      <button id="refreshBtn">🔁 Refresh</button>
+    </div>
+
+    <div id="result">Enter amount and tap Convert 🔄</div>
+    <div id="status" class="status"></div>
+
+    <footer>Built by Divine ✨</footer>
+  </div>
+
+<script>
+// ✅ PWA Service Worker Registration
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('service-worker.js')
+      .then(reg => console.log('Service Worker registered ✅'))
+      .catch(err => console.log('SW registration failed ❌', err));
+  });
+}
+
+function waitForVoices(timeout = 2000) {
+  return new Promise((resolve) => {
+    const voices = speechSynthesis.getVoices();
+    if (voices.length) return resolve(voices);
+    let resolved = false;
+    const onVoices = () => { if (!resolved) { resolved = true; resolve(speechSynthesis.getVoices()); } };
+    window.speechSynthesis.onvoiceschanged = onVoices;
+    setTimeout(() => { if (!resolved) { resolved = true; resolve(speechSynthesis.getVoices()); } }, timeout);
+  });
+}
+
+let latestRates = {};
+let lastUpdated = null;
+
+async function fetchRates(base = "USD") {
+  const liveIndicator = document.getElementById('live');
+  try {
+    liveIndicator.style.visibility = 'visible';
+    const res = await fetch(`https://open.er-api.com/v6/latest/${base}`);
+    const data = await res.json();
+    if (data.result !== "success") throw new Error("API failed");
+    latestRates = data.rates;
+    lastUpdated = new Date();
+    document.getElementById('status').innerText = `✅ Live rates updated: ${lastUpdated.toLocaleTimeString()}`;
+  } catch (err) {
+    console.error("Fetch failed:", err);
+    document.getElementById('status').innerText = "❌ Failed to update live rates.";
+  } finally {
+    setTimeout(() => { liveIndicator.style.visibility = 'hidden'; }, 2500);
+  }
+}
+
+async function convertCurrency() {
+  const amountEl = document.getElementById('amount');
+  const from = document.getElementById('from').value;
+  const to = document.getElementById('to').value;
+  const voiceToggle = document.getElementById('voiceToggle').checked;
+  const resultBox = document.getElementById('result');
+  const status = document.getElementById('status');
+
+  resultBox.innerText = 'Calculating...';
+  const amount = parseFloat(amountEl.value);
+  if (isNaN(amount) || amount <= 0) {
+    resultBox.innerText = '⚠️ Enter a valid number';
+    return;
+  }
+
+  if (!latestRates[from] || !latestRates[to]) {
+    await fetchRates(from);
+  }
+
+  const rate = latestRates[to] / latestRates[from];
+  const result = (amount * rate).toFixed(2);
+
+  // 🎨 Animated background color when converting
+  document.body.style.transition = "background 1s ease";
+  document.body.style.background = `linear-gradient(-45deg, #${Math.floor(Math.random()*16777215).toString(16)}, #${Math.floor(Math.random()*16777215).toString(16)}, #${Math.floor(Math.random()*16777215).toString(16)}, #${Math.floor(Math.random()*16777215).toString(16)})`;
+  document.body.style.backgroundSize = "400% 400%";
+
+  resultBox.innerText = `${amount} ${from} = ${result} ${to}`;
+  status.innerText = `✅ Live rate used (${lastUpdated ? lastUpdated.toLocaleTimeString() : "just now"})`;
+
+  if (voiceToggle && 'speechSynthesis' in window) {
+    await waitForVoices(800);
+    const voices = speechSynthesis.getVoices();
+    const voice = voices.find(v => /en[-_]?/i.test(v.lang)) || voices[0];
+    const msg = new SpeechSynthesisUtterance(`${amount} ${from} equals ${result} ${to}`);
+    msg.voice = voice;
+    msg.lang = 'en-US';
+    msg.pitch = 1.05; msg.rate = 0.95;
+    speechSynthesis.cancel();
+    setTimeout(()=> speechSynthesis.speak(msg), 200);
+  }
+}
+
+// 🔁 Manual Refresh
+document.getElementById('refreshBtn').addEventListener('click', () => {
+  const base = document.getElementById('from').value;
+  fetchRates(base);
+});
+
+// Fetch initial rates
+fetchRates();
+
+// Manual convert button
+document.getElementById('convertBtn').addEventListener('click', convertCurrency);
+</script>
+
+</body>
+</html>
